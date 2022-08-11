@@ -16,14 +16,13 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', [PageController::class, 'welcome'])->name('welcome');
+Route::get('/', [PageController::class, 'welcome'])->name('welco,e');
 
-Route::middleware([
+Route::group([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
-])->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
+], function () {
+    Route::get('/dashboard',[PageController::class, 'dashboard'])->name('dashboard');
+    Route::get('/chat',[PageController::class, 'chat'])->name('chat');
 });
