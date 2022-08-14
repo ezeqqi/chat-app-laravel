@@ -72,6 +72,15 @@
 
 <script setup>
     import AppLayout from '@/Layouts/AppLayout.vue';
+import axios from 'axios';
+import { onMounted, ref } from 'vue';
+    const users = ref([]);
+
+    onMounted(() => {
+        axios.get('api/users').then(response => {
+            console.log(response)
+        })
+    })
 
 </script>
 <style>
