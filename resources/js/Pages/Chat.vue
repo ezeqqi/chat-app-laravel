@@ -74,9 +74,14 @@
     const formatDate = (value) => moment(value).format('DD-MM-YYYY HH:mm')
     const users = ref([]);
     const messages = ref([]);
+    const userActive = ref({});
+
     const loadMessages = (userId) => {
+        axios.get(`api/users/${userId}`).then(response => {
+            userActive.value = response.data.user;
+        });
+
         axios.get(`api/messages/${userId}`).then(response => {
-            console.log(response)
             messages.value = response.data.messages
         })
     }
