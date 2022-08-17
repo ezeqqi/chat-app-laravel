@@ -16,6 +16,8 @@
                                 v-for="user in users"
                                 @click="() => { loadMessages(user.id) }"
                                 :key="user.id"
+                                :class="(userActive && userActive.id == user.id) ?
+                                'bg-gray-200 bg-opacity-50' : ''"
                                 class="p-6 text-lg text-gray-600 leading-7 font-semibold border-b border-gray-200 hover:bg-gray-200 hover:opacity-50 hover:cursor-pointer">
                                     <p class="flex items-center">
                                         {{ user.name }}
@@ -41,14 +43,10 @@
                                         {{ message.content }}
                                     </p>
                                     <span class="block mt-1 text-xs text-gray-500">
-                                        {{ message.created_at }}
+                                        {{ formatDate(message.created_at) }}
                                     </span>
                             </div>
                         </div>
-
-
-
-
                         <!-- form  -->
                         <div class="w-full bg-gray-200 bg-opacity-25 p-6 border-t border-gray-200">
                             <form >
@@ -71,7 +69,9 @@
     import AppLayout from '@/Layouts/AppLayout.vue';
     import axios from 'axios';
     import { onMounted, ref } from 'vue';
+    import moment from 'moment';
 
+    const formatDate = (value) => moment(value).format('DD-MM-YYYY HH:mm')
     const users = ref([]);
     const messages = ref([]);
     const loadMessages = (userId) => {
