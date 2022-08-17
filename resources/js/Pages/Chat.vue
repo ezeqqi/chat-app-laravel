@@ -70,13 +70,21 @@
 
 <script setup>
     import AppLayout from '@/Layouts/AppLayout.vue';
-import axios from 'axios';
-import { onMounted, ref } from 'vue';
+    import axios from 'axios';
+    import { onMounted, ref } from 'vue';
+
     const users = ref([]);
+    const messages = ref([]);
+    const loadMessages = (userId) => {
+        axios.get(`api/messages/${userId}`).then(response => {
+            console.log(response)
+            messages.value = response.data.messages
+        })
+    }
 
     onMounted(() => {
         axios.get('api/users').then(response => {
-            console.log(response)
+            users.value = response.data.users
         })
     })
 
