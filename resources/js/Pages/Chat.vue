@@ -28,17 +28,20 @@
                     <div class="w-9/12 flex flex-col justify-between">
                         <!-- mensagens -->
                         <div class="w-full p-6 flex flex-col overflow-y-scroll">
-                            <div class="w-full mb-3 text-right">
-                                <p class="inline-block p-2 rounded-md messageToMe" style="max-width: 75%;">
-                                    Olá testando mensagem
+                            <div
+                                v-for="message in messages"
+                                :key="message.id"
+                                class="w-full mb-3 text-right">
+                                <p class="inline-block p-2 rounded-md messageFromMe" style="max-width: 75%;">
+                                   {{ message.content }}
                                 </p>
                                 <span class="block mt-1 text-xs text-gray-500">
-                                    Hoje às 8:42
+                                    {{ message.created_at }}
                                 </span>
                             </div>
 
                             <div class="w-full mb-3">
-                                <p class="inline-block p-2 rounded-md messageFromMe" style="max-width: 75%;">
+                                <p class="inline-block p-2 rounded-md messageToMe" style="max-width: 75%;">
                                     Iai mané
                                 </p>
                                 <span class="block text-xs text-gray-500">
