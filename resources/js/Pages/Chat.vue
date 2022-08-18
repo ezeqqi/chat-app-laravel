@@ -48,10 +48,10 @@
                             </div>
                         </div>
                         <!-- form  -->
-                        <div class="w-full bg-gray-200 bg-opacity-25 p-6 border-t border-gray-200">
-                            <form >
+                        <div v-if="userActive" class="w-full bg-gray-200 bg-opacity-25 p-6 border-t border-gray-200">
+                            <form v-on:submit.prevent="sendMessage">
                                 <div class="flex rounded-md overflow-hidden border border-gray-300">
-                                    <input type="text" class="flex-1 px-4 py-2 text-sm focus:outline-none"/>
+                                    <input v-model="formMessage" type="text" class="flex-1 px-4 py-2 text-sm focus:outline-none"/>
                                     <button type="submit" class="bg-indigo-500 hover:bg-indigo-700 text-white px-4 py-2">
                                         Enviar
                                     </button>
@@ -74,7 +74,18 @@
     const formatDate = (value) => moment(value).format('DD-MM-YYYY HH:mm')
     const users = ref([]);
     const messages = ref([]);
-    const userActive = ref({});
+    const userActive = ref(null);
+    const formMessage = ref('');
+
+    const sendMessage = () => {
+        axios.post('api/messages/store', {
+            'content': formMessage.value,
+            'to': userActive.value.id
+        }).then(response => {
+            console.log(response)
+        })
+        formMessage.value = ''
+    };
 
     const loadMessages = (userId) => {
         axios.get(`api/users/${userId}`).then(response => {
@@ -85,6 +96,8 @@
             messages.value = response.data.messages
         })
     }
+
+
 
     onMounted(() => {
         axios.get('api/users').then(response => {
