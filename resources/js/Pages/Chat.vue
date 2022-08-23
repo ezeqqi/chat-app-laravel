@@ -35,7 +35,7 @@
                                 :class="(message.from == $page.props.auth.user.id) ?
                                     'text-right' : ''"
                                 :key="message.id"
-                                class="w-full mb-3">
+                                class="w-full mb-3 message">
                                     <p
                                         :class="(message.from == $page.props.auth.user.id) ?
                                         'messageFromMe' : 'messageToMe'"
@@ -77,27 +77,40 @@
     const userActive = ref(null);
     const formMessage = ref('');
 
-    const sendMessage = () => {
-        axios.post('api/messages/store', {
+    const sendMessage = async() => {
+        await axios.post('api/messages/store', {
             'content': formMessage.value,
             'to': userActive.value.id
         }).then(response => {
-            console.log(response)
+            messages.value.push({
+                'from': '4',
+                'to': userActive.value.id,
+                'content': formMessage.value,
+                'created_at': new Date().toISOString(),
+                'updated_at': new Date().toISOString(),
+            })
+            formMessage.value = ''
         })
-        formMessage.value = ''
+        scrollToBottom();
     };
 
-    const loadMessages = (userId) => {
-        axios.get(`api/users/${userId}`).then(response => {
+    const loadMessages = async (userId) => {
+        await axios.get(`api/users/${userId}`).then(response => {
             userActive.value = response.data.user;
         });
 
-        axios.get(`api/messages/${userId}`).then(response => {
+        await axios.get(`api/messages/${userId}`).then(response => {
             messages.value = response.data.messages
         })
+
+        scrollToBottom();
     }
 
-
+    const scrollToBottom = () => {
+        if(messages.value.length > 0) {
+            document.querySelectorAll('.message:last-child')[0].scrollIntoView()
+        }
+    }
 
     onMounted(() => {
         axios.get('api/users').then(response => {
